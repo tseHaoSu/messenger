@@ -20,13 +20,14 @@ export const MessageInput = ({ conversationId, disabled, onSend }: MessageInputP
   return (
     <div className="flex gap-2 border-t border-border/50 p-4">
       <Input
+        data-testid="message-input"
         placeholder="Type a message..."
         value={draft}
         onChange={(e) => conversationId && setDraft(conversationId, e.target.value)}
         onKeyDown={(e) => e.key === "Enter" && handleSend()}
         disabled={disabled}
       />
-      <Button onClick={handleSend} disabled={disabled || !draft.trim()}>
+      <Button data-testid="send-button" onClick={handleSend} disabled={disabled || !draft.trim()}>
         Send
       </Button>
     </div>

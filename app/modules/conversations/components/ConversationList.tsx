@@ -32,7 +32,7 @@ export const ConversationList = ({
   onHoverConversation,
   onSelectConversation,
 }: ConversationListProps): React.ReactElement => (
-  <div className="flex h-full flex-col bg-card">
+  <div className="flex h-full flex-col bg-card" data-testid="conversation-list">
     <div className="flex items-center justify-between border-b border-border/50 px-8 py-4">
       <div>
         <h2 className="text-lg font-semibold tracking-tight">Conversations</h2>
