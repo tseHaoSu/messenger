@@ -1,36 +1,96 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Messenger
+
+Real-time messaging application with authentication and instant message delivery.
+
+## Demo
+
+Coming soon
+
+## Screenshots
+
+Coming soon
+
+## Features
+
+- Real-time messaging with instant updates
+- User authentication (sign up, sign in, sign out)
+- Create and delete conversations
+- Support for 1:1 and group conversations
+- Message drafts persistence
+- Dark/light theme toggle
+- Responsive design (desktop and mobile)
+
+## Tech Stack
+
+- **Framework**: Next.js 16, React 19, TypeScript
+- **Backend**: Convex (real-time database + serverless functions)
+- **Authentication**: Clerk
+- **Styling**: Tailwind CSS, shadcn/ui
+- **State Management**: Zustand
+
+## Project Structure
+
+```
+messenger/
+├── app/
+│   ├── (auth)/              # Auth routes (sign-in, sign-up)
+│   ├── (dashboard)/         # Dashboard routes (conversations)
+│   └── modules/             # Feature modules
+│       ├── auth/            # Auth views and layouts
+│       ├── conversations/   # Conversation components, hooks, views
+│       └── dashboard/       # Dashboard layout and header
+├── components/
+│   ├── providers/           # Context providers (Convex, Clerk, Theme)
+│   ├── shimmer/             # Loading skeleton components
+│   └── ui/                  # Reusable UI components (shadcn)
+├── convex/
+│   ├── private/             # Protected mutations and queries
+│   ├── schema.ts            # Database schema
+│   └── lib/utils.ts         # Backend utilities
+├── hooks/                   # Custom React hooks
+└── lib/                     # Utility functions
+```
 
 ## Getting Started
 
-First, run the development server:
+### Prerequisites
+
+- Node.js 18+
+- pnpm
+- Convex account
+- Clerk account
+
+### Environment Variables
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+NEXT_PUBLIC_CONVEX_URL=
+CONVEX_DEPLOYMENT=
+NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
+CLERK_SECRET_KEY=
+NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
+NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installation
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+pnpm install
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Development
 
-## Learn More
+```bash
+pnpm dev
+```
 
-To learn more about Next.js, take a look at the following resources:
+This runs Next.js and Convex development servers concurrently.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Build
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```bash
+pnpm build
+```
 
-## Deploy on Vercel
+## License
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+MIT
