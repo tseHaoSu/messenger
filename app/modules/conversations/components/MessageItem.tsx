@@ -1,7 +1,8 @@
 import Image from "next/image";
 import type { Id } from "@/convex/_generated/dataModel";
+import { getAvatarUrl } from "@/lib/utils";
 
-interface MessageSender {
+interface Sender {
   _id: Id<"users">;
   name: string | null;
   image?: string | null;
@@ -12,11 +13,8 @@ interface MessageItemProps {
   type: "text" | "system" | "image";
   body?: string;
   image?: string;
-  sender: MessageSender | null;
+  sender: Sender | null;
 }
-
-const getAvatarUrl = (sender: MessageSender | null): string =>
-  sender?.image ?? `https://api.dicebear.com/7.x/avataaars/svg?seed=${sender?.name}`;
 
 export const MessageItem = ({ type, body, image, sender }: MessageItemProps): React.ReactElement => {
   if (type === "system") {
@@ -28,7 +26,7 @@ export const MessageItem = ({ type, body, image, sender }: MessageItemProps): Re
   return (
     <div className="flex items-start gap-3">
       <Image
-        src={getAvatarUrl(sender)}
+        src={getAvatarUrl(sender?.name, sender?.image)}
         alt={sender?.name ?? ""}
         width={32}
         height={32}

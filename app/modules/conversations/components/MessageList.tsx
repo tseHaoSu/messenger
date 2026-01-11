@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Id } from "@/convex/_generated/dataModel";
 import type { OptimisticMessage } from "@/app/modules/conversations/hooks/use-optimistic-messages";
+import { getAvatarUrl } from "@/lib/utils";
 import { MessageItem } from "./MessageItem";
 import { MessageInput } from "./MessageInput";
 
@@ -18,7 +19,7 @@ interface Message {
   sender: MessageSender | null;
 }
 
-interface ConversationParticipant {
+interface Participant {
   user: {
     _id: Id<"users">;
     name: string | null;
@@ -34,15 +35,12 @@ interface CurrentUser {
 interface MessageListProps {
   messages: Message[];
   optimisticMessages: OptimisticMessage[];
-  participants: (ConversationParticipant | null)[];
+  participants: (Participant | null)[];
   hasSelectedConversation: boolean;
   onSendMessage: (body: string) => void;
   conversationId: string | null;
   currentUser?: CurrentUser | null;
 }
-
-const getAvatarUrl = (user?: CurrentUser | null): string =>
-  user?.image ?? `https://api.dicebear.com/7.x/avataaars/svg?seed=${user?.name ?? "user"}`;
 
 export const MessageList = ({
   messages,
@@ -53,10 +51,8 @@ export const MessageList = ({
   conversationId,
   currentUser,
 }: MessageListProps): React.ReactElement => {
-  const validParticipants = participants.filter(
-    (participant): participant is ConversationParticipant => Boolean(participant)
-  );
-  const participantNames = validParticipants.map((participant) => participant.user.name).join(", ");
+  const validParticipants = participants.filter((p): p is Participant => Boolean(p));
+  const participantNames = validParticipants.map((p) => p.user.name).join(", ");
 
   return (
     <div className="flex h-full flex-col bg-card">
@@ -82,7 +78,7 @@ export const MessageList = ({
         {optimisticMessages.map((message) => (
           <div key={message.id} className="flex items-start gap-3 opacity-70">
             <Image
-              src={getAvatarUrl(currentUser)}
+              src={getAvatarUrl(currentUser?.name, currentUser?.image)}
               alt={currentUser?.name ?? "You"}
               width={32}
               height={32}

@@ -15,7 +15,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { cn } from "@/lib/utils";
+import { cn, getAvatarUrl } from "@/lib/utils";
 
 interface User {
   _id: Id<"users">;
@@ -28,9 +28,6 @@ interface UserSelectItemProps {
   isSelected: boolean;
   onToggle: (userId: Id<"users">) => void;
 }
-
-const getAvatarUrl = (name?: string | null, image?: string | null): string =>
-  image ?? `https://api.dicebear.com/7.x/avataaars/svg?seed=${name ?? "user"}`;
 
 const UserSelectItem = ({
   user,

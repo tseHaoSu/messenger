@@ -1,18 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { useTheme } from "next-themes";
 import { MessageCircle, Moon, Sun } from "lucide-react";
 import { UserButton } from "@clerk/nextjs";
 import { Button } from "@/components/ui/button";
 
+const useIsMounted = (): boolean =>
+  useSyncExternalStore(() => () => {}, () => true, () => false);
+
 export const Header = (): React.ReactElement => {
   const { setTheme, resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  const mounted = useIsMounted();
 
   const toggleTheme = (): void => {
     setTheme(resolvedTheme === "dark" ? "light" : "dark");
