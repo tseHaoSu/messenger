@@ -1,11 +1,5 @@
-import { Card, CardContent } from "@/components/ui/card";
-
 export const EmptyConversation = (): React.ReactElement => (
-  <Card className="flex h-full items-center justify-center">
-    <CardContent>
-      <p className="text-muted-foreground">
-        Select a conversation to view messages
-      </p>
-    </CardContent>
-  </Card>
+  <div className="flex h-full flex-col items-center justify-center bg-card">
+    <p className="text-muted-foreground">Select a conversation to view messages</p>
+  </div>
 );
