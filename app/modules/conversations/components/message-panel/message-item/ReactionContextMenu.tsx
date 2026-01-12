@@ -17,12 +17,18 @@ export const ReactionContextMenu = ({
 }: ReactionContextMenuProps): React.ReactElement => (
   <ContextMenu>
     <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
-    <ContextMenuContent>
-      {(Object.entries(REACTION_EMOJI) as [ReactionType, string][]).map(([type, emoji]) => (
-        <ContextMenuItem key={type} onClick={() => onReact(type)}>
-          {emoji} {type.charAt(0).toUpperCase() + type.slice(1)}
-        </ContextMenuItem>
-      ))}
+    <ContextMenuContent className="min-w-0 rounded-full border-border/50 bg-background/95 p-1 backdrop-blur-sm">
+      <div className="flex items-center gap-0.5">
+        {(Object.entries(REACTION_EMOJI) as [ReactionType, string][]).map(([type, emoji]) => (
+          <ContextMenuItem
+            key={type}
+            onClick={() => onReact(type)}
+            className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full p-0 text-lg hover:bg-muted focus:bg-muted"
+          >
+            {emoji}
+          </ContextMenuItem>
+        ))}
+      </div>
     </ContextMenuContent>
   </ContextMenu>
 );

@@ -15,20 +15,20 @@ export const ReactionDisplay = ({ counts }: ReactionDisplayProps): React.ReactEl
   const totalCount = reactions.reduce((sum, [, count]) => sum + count, 0);
 
   return (
-    <div className="flex items-center rounded-full bg-background px-1 py-0.5 shadow-md ring-1 ring-border/30">
+    <div className="flex items-center rounded-full bg-background px-0.5 shadow-sm ring-1 ring-border/20">
       <div className="flex items-center">
         {reactions.map(([type], index) => (
           <span
             key={type}
-            className={index > 0 ? "-ml-1" : ""}
-            style={{ fontSize: "14px" }}
+            className={index > 0 ? "-ml-0.5" : ""}
+            style={{ fontSize: "11px" }}
           >
             {REACTION_EMOJI[type]}
           </span>
         ))}
       </div>
       {totalCount > 1 && (
-        <span className="ml-1 text-xs text-muted-foreground">{totalCount}</span>
+        <span className="ml-0.5 text-[10px] font-bold text-muted-foreground">{totalCount}</span>
       )}
     </div>
   );

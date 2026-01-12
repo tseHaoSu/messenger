@@ -2,23 +2,20 @@
 
 Real-time messaging application with authentication and instant message delivery.
 
-## Demo
-
-Coming soon
-
-## Screenshots
-
-Coming soon
-
 ## Features
 
 - Real-time messaging with instant updates
 - User authentication (sign up, sign in, sign out)
 - Create and delete conversations
 - Support for 1:1 and group conversations
+- Typing indicators with real-time sync
+- Message reactions (like, love, laugh)
+- Image attachments with drag-and-drop upload
+- FB-style timestamp dividers (15-min threshold)
+- Optimistic message sending
 - Message drafts persistence
 - Dark/light theme toggle
-- Responsive design (desktop and mobile)
+- Responsive design
 
 ## Tech Stack
 
@@ -27,28 +24,44 @@ Coming soon
 - **Authentication**: Clerk
 - **Styling**: Tailwind CSS, shadcn/ui
 - **State Management**: Zustand
+- **Validation**: Zod
+- **Testing**: Playwright (E2E)
 
 ## Project Structure
 
 ```
 messenger/
 ├── app/
-│   ├── (auth)/              # Auth routes (sign-in, sign-up)
-│   ├── (dashboard)/         # Dashboard routes (conversations)
-│   └── modules/             # Feature modules
-│       ├── auth/            # Auth views and layouts
-│       ├── conversations/   # Conversation components, hooks, views
-│       └── dashboard/       # Dashboard layout and header
+│   ├── (auth)/                    # Auth routes (sign-in, sign-up)
+│   ├── (dashboard)/               # Dashboard routes (conversations)
+│   └── modules/                   # Feature modules
+│       ├── auth/                  # Auth views and layouts
+│       ├── conversations/
+│       │   ├── components/
+│       │   │   ├── conversation-list/
+│       │   │   │   ├── new-conversation-dialog/
+│       │   │   │   ├── ConversationList.tsx
+│       │   │   │   └── ConversationItem.tsx
+│       │   │   └── message-panel/
+│       │   │       ├── message-item/
+│       │   │       ├── message-input/
+│       │   │       ├── MessageList.tsx
+│       │   │       └── TypingIndicator.tsx
+│       │   ├── hooks/
+│       │   ├── views/
+│       │   └── types.ts
+│       └── dashboard/             # Dashboard layout and header
 ├── components/
-│   ├── providers/           # Context providers (Convex, Clerk, Theme)
-│   ├── shimmer/             # Loading skeleton components
-│   └── ui/                  # Reusable UI components (shadcn)
+│   ├── providers/                 # Context providers (Convex, Clerk, Theme)
+│   ├── shimmer/                   # Loading skeleton components
+│   └── ui/                        # Reusable UI components (shadcn)
 ├── convex/
-│   ├── private/             # Protected mutations and queries
-│   ├── schema.ts            # Database schema
-│   └── lib/utils.ts         # Backend utilities
-├── hooks/                   # Custom React hooks
-└── lib/                     # Utility functions
+│   ├── private/                   # Protected mutations and queries
+│   ├── schema.ts                  # Database schema
+│   └── lib/utils.ts               # Backend utilities
+├── e2e/                           # Playwright E2E tests
+├── hooks/                         # Custom React hooks
+└── lib/                           # Utility functions and constants
 ```
 
 ## Getting Started
@@ -83,7 +96,13 @@ pnpm install
 pnpm dev
 ```
 
-This runs Next.js and Convex development servers concurrently.
+Runs Next.js and Convex development servers concurrently.
+
+### Testing
+
+```bash
+pnpm test:e2e
+```
 
 ### Build
 
