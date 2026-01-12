@@ -86,7 +86,7 @@ export const MessageList = ({
         })}
         {optimisticMessages.map((message) => (
           <div key={message.id} className="flex justify-end">
-            <div className="max-w-[70%]">
+            <div className="max-w-[85%] sm:max-w-[70%]">
               <MessageBubble
                 type="text"
                 body={message.body}
