@@ -42,7 +42,7 @@ export const ConversationItem = ({
       href={`/conversations/${id}`}
       data-testid="conversation-item"
       className={cn(
-        "group flex items-center gap-2 overflow-hidden rounded-lg px-2 py-2.5 transition-all duration-200 hover:bg-accent/50",
+        "group flex items-center gap-2 overflow-hidden rounded-lg px-2 py-3 transition-all duration-200 hover:bg-accent/50 active:bg-accent/70",
         isSelected && "bg-accent shadow-sm"
       )}
       onMouseEnter={() => onHover?.(id)}

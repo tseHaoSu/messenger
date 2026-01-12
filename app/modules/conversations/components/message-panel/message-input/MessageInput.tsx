@@ -32,7 +32,7 @@ export const MessageInput = ({
   };
 
   return (
-    <div className="flex gap-2 border-t border-border/50 p-4">
+    <div className="flex gap-2 border-t border-border/50 p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
       <Input
         data-testid="message-input"
         placeholder="Type a message..."

@@ -44,7 +44,7 @@ export const MessageItem = ({
       <div className={hasReactions ? "mb-3" : ""}>
         <div className="flex justify-end">
           <ReactionContextMenu onReact={handleReact}>
-            <div className="relative max-w-[70%] cursor-pointer">
+            <div className="relative max-w-[85%] cursor-pointer sm:max-w-[70%]">
               <MessageBubble type={type} body={body} image={image} isCurrentUser />
               {hasReactions && (
                 <div className="absolute -bottom-3 right-2">
@@ -67,7 +67,7 @@ export const MessageItem = ({
           size="sm"
           className="shrink-0"
         />
-        <div className="max-w-[70%]">
+        <div className="max-w-[85%] sm:max-w-[70%]">
           <span className="text-xs font-medium">{sender?.name}</span>
           <ReactionContextMenu onReact={handleReact}>
             <div className="relative cursor-pointer">
