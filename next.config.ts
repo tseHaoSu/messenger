@@ -7,6 +7,7 @@ const nextConfig: NextConfig = {
       { hostname: "api.dicebear.com" },
       { hostname: "img.clerk.com" },
       { hostname: "picsum.photos" },
+      { hostname: "*.convex.cloud" },
     ],
   },
 };

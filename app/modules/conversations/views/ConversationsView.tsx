@@ -4,7 +4,7 @@ import { useQuery, useMutation } from "convex/react";
 import { useParams, useRouter } from "next/navigation";
 import { api } from "@/convex/_generated/api";
 import type { Id } from "@/convex/_generated/dataModel";
-import { ConversationList } from "@/app/modules/conversations/components/ConversationList";
+import { ConversationList } from "@/app/modules/conversations/components/conversation-list/ConversationList";
 import { ConversationListSkeleton } from "@/components/shimmer/ConversationListSkeleton";
 import { useConversationPrefetch } from "@/app/modules/conversations/hooks/use-conversation-prefetch";
 import { GrainOverlay } from "@/components/grain-overlay";

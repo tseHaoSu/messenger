@@ -1,7 +1,7 @@
 import { ConvexError, v } from "convex/values";
 import { mutation, query } from "../_generated/server";
 import { paginationOptsValidator } from "convex/server";
-import { getAuthenticatedUser } from "../lib/utils";
+import { getAuthenticatedUser, getCurrentUser } from "../lib/utils";
 
 export const getMany = query({
   args: {
@@ -125,5 +125,70 @@ export const create = mutation({
     });
 
     return messageId;
+  },
+});
+
+export const toggleReaction = mutation({
+  args: {
+    messageId: v.id("messages"),
+    type: v.union(v.literal("like"), v.literal("love"), v.literal("laugh")),
+  },
+  handler: async (ctx, args) => {
+    const user = await getCurrentUser(ctx);
+
+    const message = await ctx.db.get(args.messageId);
+    if (!message) {
+      throw new ConvexError({
+        code: "NOT_FOUND",
+        message: "Message not found.",
+      });
+    }
+
+    // Check for existing reaction
+    const existingReaction = await ctx.db
+      .query("messageReactions")
+      .withIndex("by_message_user", (q) =>
+        q.eq("messageId", args.messageId).eq("userId", user._id)
+      )
+      .unique();
+
+    const currentCounts = message.reactionCounts ?? { like: 0, love: 0, laugh: 0 };
+
+    if (existingReaction) {
+      if (existingReaction.type === args.type) {
+        // Same reaction - remove it
+        await ctx.db.delete(existingReaction._id);
+        await ctx.db.patch(args.messageId, {
+          reactionCounts: {
+            ...currentCounts,
+            [args.type]: Math.max(0, currentCounts[args.type] - 1),
+          },
+        });
+      } else {
+        // Different reaction - update it
+        const oldType = existingReaction.type;
+        await ctx.db.patch(existingReaction._id, { type: args.type });
+        await ctx.db.patch(args.messageId, {
+          reactionCounts: {
+            ...currentCounts,
+            [oldType]: Math.max(0, currentCounts[oldType] - 1),
+            [args.type]: currentCounts[args.type] + 1,
+          },
+        });
+      }
+    } else {
+      // No existing reaction - add new one
+      await ctx.db.insert("messageReactions", {
+        messageId: args.messageId,
+        userId: user._id,
+        type: args.type,
+      });
+      await ctx.db.patch(args.messageId, {
+        reactionCounts: {
+          ...currentCounts,
+          [args.type]: currentCounts[args.type] + 1,
+        },
+      });
+    }
   },
 });

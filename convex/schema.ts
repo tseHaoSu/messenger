@@ -59,4 +59,12 @@ export default defineSchema({
   })
     .index("by_message", ["messageId"])
     .index("by_message_user", ["messageId", "userId"]),
+
+  typingIndicators: defineTable({
+    conversationId: v.id("conversations"),
+    userId: v.id("users"),
+    updatedAt: v.number(),
+  })
+    .index("by_conversation", ["conversationId"])
+    .index("by_conversation_user", ["conversationId", "userId"]),
 });

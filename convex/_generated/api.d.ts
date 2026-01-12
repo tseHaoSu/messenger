@@ -10,7 +10,9 @@
 
 import type * as lib_utils from "../lib/utils.js";
 import type * as private_conversations from "../private/conversations.js";
+import type * as private_files from "../private/files.js";
 import type * as private_messages from "../private/messages.js";
+import type * as private_typing from "../private/typing.js";
 import type * as seed from "../seed.js";
 import type * as users from "../users.js";
 
@@ -23,7 +25,9 @@ import type {
 declare const fullApi: ApiFromModules<{
   "lib/utils": typeof lib_utils;
   "private/conversations": typeof private_conversations;
+  "private/files": typeof private_files;
   "private/messages": typeof private_messages;
+  "private/typing": typeof private_typing;
   seed: typeof seed;
   users: typeof users;
 }>;

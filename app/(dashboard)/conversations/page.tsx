@@ -1,4 +1,4 @@
-import { EmptyConversation } from "@/app/modules/conversations/components/EmptyConversation";
+import { EmptyConversation } from "@/app/modules/conversations/components/conversation-list/EmptyConversation";
 
 const ConversationsPage = () => <EmptyConversation />;
 
