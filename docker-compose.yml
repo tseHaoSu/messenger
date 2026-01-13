@@ -1,0 +1,86 @@
+# Docker Compose file for local development and testing
+# Version 3.8 is widely supported and has all features we need
+version: "3.8"
+
+services:
+  # ==========================================================================
+  # MESSENGER APP SERVICE
+  # ==========================================================================
+  app:
+    # Build configuration
+    build:
+      # Context = directory containing Dockerfile and source files
+      context: .
+      # Path to Dockerfile (relative to context)
+      dockerfile: Dockerfile
+      # Build-time arguments (NEXT_PUBLIC_* vars embedded into JS bundle)
+      # These are read from .env file or can be overridden
+      args:
+        - NEXT_PUBLIC_CONVEX_URL=${NEXT_PUBLIC_CONVEX_URL}
+        - NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}
+        - NEXT_PUBLIC_CLERK_SIGN_IN_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_URL:-/sign-in}
+        - NEXT_PUBLIC_CLERK_SIGN_UP_URL=${NEXT_PUBLIC_CLERK_SIGN_UP_URL:-/sign-up}
+        - NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL=${NEXT_PUBLIC_CLERK_SIGN_IN_FALLBACK_REDIRECT_URL:-/conversations}
+        - NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL=${NEXT_PUBLIC_CLERK_SIGN_UP_FALLBACK_REDIRECT_URL:-/conversations}
+        - NEXT_PUBLIC_APP_URL=${NEXT_PUBLIC_APP_URL}
+
+    # Container name (optional, useful for easier reference)
+    container_name: messenger-app
+
+    # Port mapping: HOST:CONTAINER
+    # Access app at http://localhost:3000
+    ports:
+      - "3000:3000"
+
+    # Runtime environment variables
+    # These are NOT baked into the image, set when container starts
+    environment:
+      # Clerk secret key (server-side only, never exposed to client)
+      - CLERK_SECRET_KEY=${CLERK_SECRET_KEY}
+      # Node environment
+      - NODE_ENV=production
+
+    # Read environment variables from .env file
+    # docker-compose automatically loads .env from the same directory
+    env_file:
+      - .env.local
+
+    # Restart policy
+    # - "no": Never restart (default)
+    # - "always": Always restart
+    # - "on-failure": Restart only if exit code is non-zero
+    # - "unless-stopped": Restart unless manually stopped
+    restart: unless-stopped
+
+    # Health check to verify container is running correctly
+    # Docker will mark container as unhealthy if check fails
+    healthcheck:
+      # curl the health endpoint (Next.js serves at /)
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:3000"]
+      # Wait 10s before first check
+      interval: 30s
+      # Check every 30s
+      timeout: 10s
+      # Fail after 3 consecutive failures
+      retries: 3
+      # Wait 40s for app to start before checking
+      start_period: 40s
+
+# ==========================================================================
+# NOTES
+# ==========================================================================
+#
+# Usage:
+#   docker compose up --build     # Build and start
+#   docker compose up -d          # Start in background (detached)
+#   docker compose down           # Stop and remove containers
+#   docker compose logs -f        # Follow logs
+#   docker compose ps             # List running containers
+#
+# Environment variables:
+#   Create a .env.local file with your actual values, or
+#   set them in your shell before running docker compose
+#
+# For production deployment:
+#   - Use docker compose -f docker-compose.prod.yml up
+#   - Or push image to registry and deploy separately

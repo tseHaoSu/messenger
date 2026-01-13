@@ -1,0 +1,47 @@
+# Dependencies - will be installed fresh in container
+node_modules
+
+# Build outputs - will be regenerated
+.next
+out
+build
+
+# Version control
+.git
+.gitignore
+
+# Environment files - secrets should not be baked into image
+.env*
+
+# Documentation - not needed in production image
+*.md
+LICENSE
+
+# IDE and editor files
+.vscode
+.idea
+*.swp
+*.swo
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing artifacts
+playwright-report
+test-results
+blob-report
+coverage
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# Convex local development
+.convex
+
+# Docker files (avoid recursive context issues)
+Dockerfile*
+docker-compose*

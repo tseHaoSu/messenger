@@ -72,12 +72,14 @@ messenger/
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 18+ (or Docker)
 - pnpm
 - Convex account
 - Clerk account
 
 ### Environment Variables
+
+Create a `.env.local` file:
 
 ```bash
 NEXT_PUBLIC_CONVEX_URL=
@@ -86,17 +88,46 @@ NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY=
 CLERK_SECRET_KEY=
 NEXT_PUBLIC_CLERK_SIGN_IN_URL=/sign-in
 NEXT_PUBLIC_CLERK_SIGN_UP_URL=/sign-up
+NEXT_PUBLIC_APP_URL=
 ```
 
-### Installation
+### Docker (Recommended)
+
+Run the app with Docker Compose:
+
+```bash
+# Build and start
+docker compose up --build
+
+# Start in background
+docker compose up -d
+
+# View logs
+docker compose logs -f
+
+# Stop
+docker compose down
+```
+
+Access at http://localhost:3000
+
+**Docker features:**
+- Multi-stage build for minimal image size (~150MB)
+- Non-root user for security
+- Health checks for container monitoring
+- Automatic restarts (`unless-stopped`)
+
+**Build args** (NEXT_PUBLIC_* vars are embedded at build time):
+- `NEXT_PUBLIC_CONVEX_URL`
+- `NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY`
+- `NEXT_PUBLIC_CLERK_SIGN_IN_URL`
+- `NEXT_PUBLIC_CLERK_SIGN_UP_URL`
+- `NEXT_PUBLIC_APP_URL`
+
+### Local Development (Without Docker)
 
 ```bash
 pnpm install
-```
-
-### Development
-
-```bash
 pnpm dev
 ```
 
