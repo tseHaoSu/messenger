@@ -248,3 +248,94 @@ export const clearAll = mutation({
     return { status: "cleared" };
   },
 });
+
+export const clearAndSeed = mutation({
+  args: {},
+  handler: async (ctx) => {
+    // Clear all tables
+    const tables = [
+      "typingIndicators",
+      "messageReactions",
+      "messages",
+      "conversationMembers",
+      "conversations",
+      "users",
+    ] as const;
+
+    for (const table of tables) {
+      const docs = await ctx.db.query(table).collect();
+      for (const doc of docs) {
+        await ctx.db.delete(doc._id);
+      }
+    }
+
+    // Create users and store mapping
+    const userIdMap = new Map<number, Id<"users">>();
+    for (const user of users) {
+      const id = await ctx.db.insert("users", {
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        tokenIdentifier: user.tokenIdentifier,
+      });
+      userIdMap.set(user.id, id);
+    }
+
+    // Create conversations and store mapping
+    const conversationIdMap = new Map<number, Id<"conversations">>();
+    for (const conv of conversations) {
+      const id = await ctx.db.insert("conversations", {
+        isGroup: false,
+        lastMessageAt: conv.lastMessageAt,
+      });
+      conversationIdMap.set(conv.id, id);
+
+      // Create conversation members
+      for (const participantId of conv.participants) {
+        const userId = userIdMap.get(participantId);
+        if (userId) {
+          await ctx.db.insert("conversationMembers", {
+            conversationId: id,
+            userId,
+          });
+        }
+      }
+    }
+
+    // Create messages and track last message per conversation
+    const lastMessageMap = new Map<number, Id<"messages">>();
+    for (const msg of messages) {
+      const conversationId = conversationIdMap.get(msg.conversationId);
+      const senderId = userIdMap.get(msg.userId);
+
+      if (conversationId && senderId) {
+        const messageId = await ctx.db.insert("messages", {
+          conversationId,
+          senderId,
+          type: msg.type,
+          body: msg.body,
+          image: msg.image,
+          createdAt: msg.createdAt,
+          reactionCounts: msg.reactions,
+        });
+        lastMessageMap.set(msg.conversationId, messageId);
+      }
+    }
+
+    // Update conversations with lastMessageId
+    for (const [convId, messageId] of lastMessageMap) {
+      const conversationId = conversationIdMap.get(convId);
+      if (conversationId) {
+        await ctx.db.patch(conversationId, { lastMessageId: messageId });
+      }
+    }
+
+    return {
+      status: "success",
+      cleared: true,
+      users: users.length,
+      conversations: conversations.length,
+      messages: messages.length,
+    };
+  },
+});
