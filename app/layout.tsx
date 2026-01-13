@@ -24,8 +24,28 @@ const ibmPlexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Messenger",
-  description: "Real-time messaging application",
+  title: {
+    template: "%s | Messenger",
+    default: "Messenger",
+  },
+  description:
+    "Real-time messaging application. Stay connected with friends and colleagues.",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000"
+  ),
+  keywords: ["messenger", "chat", "real-time", "messaging", "communication"],
+  openGraph: {
+    title: "Messenger",
+    description: "Real-time messaging application",
+    type: "website",
+    locale: "en_US",
+    siteName: "Messenger",
+  },
+  twitter: {
+    card: "summary",
+    title: "Messenger",
+    description: "Real-time messaging application",
+  },
 };
 
 export const viewport: Viewport = {
